@@ -1,0 +1,99 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-9 info-holder">
+        <div class="well">
+            <nvd3-multi-bar-chart
+                ng-model="filteredChartData"
+                objectequality="true"
+                data="filteredChartData"
+                id="exampleId"
+                height="350"
+                showXAxis="true"
+                showYAxis="true"
+                showLegend="true"
+                showControls="false"
+                reduceXTicks="false"
+                rotateLabels="0"
+                delay="1000"
+                x="xFunction()"
+                interactive="true"
+                tooltips="true"
+                clipEdge="true"
+                staggerLabels="false"
+                ng-if="filteredChartData[0]"
+                noData="Sorry, no data is available at the moment :("
+                >
+                  <svg></svg>
+            </nvd3-multi-bar-chart>
+          </div>
+          <div class="row well">
+            <div class="input-group">
+            <h4>Filter by team:</h4>
+              <h4><span ng-repeat="team in teams" class="label pointer margin-left-5" ng-class="{'label-success': filters.teams.indexOf(team)>-1, 'label-default':filters.teams.indexOf(team) == -1}" ng-click="filtersChange(team,'team')"> {{team}} </span></h4>
+            </div>
+            <div class="input-group">
+            <h4>Filter by Job Code:</h4>
+              <h4><span ng-repeat="code in jobCodes" ng-click="filtersChange(code,'jobCode')" class="label pointer margin-left-5" ng-class="{'label-success': filters.jobCodes.indexOf(code)>-1, 'label-default':filters.jobCodes.indexOf(code) == -1}"> {{code}} </span></h4>
+            </div>
+          </div>
+          <div class="row user-profile-tab" ng-repeat="user in filteredUsers | orderBy:'name'" ng-class="{'user-checked': isUserSelected(user.name), pointer : rules.checkboxes}" ng-click="rules.checkboxes ? selDeSelUserForKarmaChange(user.name, user._id) : null">
+            <div class="col-lg-3">
+              <h4>{{user.name}}</h4>
+              <h5>{{user.email}}</h5>
+              <a href="/profile?user={{user._id}}" ng-hide="rules.checkboxes">
+                <button class="btn btn-success margin-top">See profile</button>
+              </a>
+            </div>
+
+            <div class="col-lg-2"><h4><span>Karma: </span>{{user.points}}</h4></div>
+            <div class="col-lg-7">
+              <div class="recent-holder alert" ng-hide="user.buff" ng-class="{'alert-success': user.recent.points > 0, 'alert-danger': user.recent.points < 0}">
+                <div>Points: {{user.recent.points}}pts</div>
+                <div>Comment: {{user.recent.msg}}</div>
+                <div class="text-muted">{{user.recent.date}}</div>
+                <div class="text-muted">by: {{user.recent.updatedBy}}</div>
+              </div>
+            </div>
+          </div>
+    </div>
+
+    <div class="col-lg-3">
+      <div class="list-group sticky">
+        <a class="list-group-item active"> Team goals </a>
+        <a class="list-group-item" ng-hide="rules.content.length > 0">Nothing here</a>
+        <a class="list-group-item" ng-repeat='rule in rules.content | orderBy:"points":true' ng-click='ruleCollapse(rule)' ng-class="{'list-group-item-info': rule.active}">
+          <span class="badge" ng-class="{'badge-success': rule.points > 0, 'badge-danger': rule.points < 0}">{{rule.points}}</span><span class="glyphicon glyphicon-trash margin-right-5" ng-click="removeRule(rule.msg);$event.stopPropagation()" ></span><span class="pointer">{{rule.msg}}</span>
+          
+          <div class="list" ng-show="rule.active">
+            <h4 class="margin-left-5">Apply for: </h4>
+            <p class="margin-left-15 bold" href="" ng-repeat="user in changeKarma | orderBy:user">{{user.name}}
+            <span class="glyphicon glyphicon-remove pointer ex-user" ng-click="selDeSelUserForKarmaChange(user.name, user.id); $event.stopPropagation()"></span>
+            </p>
+          </div>
+          <div class="btn-holder margin-top" role="group" ng-show="rule.active">
+            <button class="btn" ng-class="{'btn-success': changeKarma.length > 0, 'btn-danger disabled' : changeKarma.length == 0}" ng-click="changeUserKarma(changeKarma, rule); $event.stopPropagation()">{{changeKarma.length > 0 ? 'Apply this rule' : 'Click users first' }}</button>
+            <button class="btn btn-warning pull-right" ng-click="clearTmp(); $event.stopPropagation()">Cancel</button>
+          </div>
+        </a>
+
+        <li class="list-group-item" ng-if="role=='admin'">
+          <form ng-submit="addRule()">
+          <div class="input-group">
+              <span class="input-group-addon">Txt:</span>
+              <input class="form-control" type="text" ng-model="newRule.text" placeholder="Enter goal text" ng-required="true">
+          </div>
+          <div class="input-group margin-top">
+            <span class="input-group-addon">Pts:</span>
+            <input class="form-control" type="number" ng-model="newRule.points" placeholder="0" ng-required="true">
+          </div>
+              <button class="btn btn-primary form-control margin-top" type="submit">Add global goal</button>
+          </form>
+        </li>
+      </div>
+    </div>
+  </div>
+
+ 
+
+</div>

@@ -1,0 +1,85 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container">
+	<div class="row">
+			<!-- <pre>{{showPerPage}}</pre> -->
+			<div class="well row">
+		  	<nvd3-multi-bar-chart
+		  		ng-if="data[0].values.length>0"
+	    		data="data"
+	    		noData="Sorry, no data available yet!"
+	    		objectequality="true"
+	    		showControls="true"
+	        id="exampleId"
+	        showXAxis="true"
+	        showYAxis="true"
+	        x="xFunction()"
+	        showLegend="true"
+	        height="350"
+	        rotateLabels="15"
+	        clipEdges="false"
+	        tooltips="true">
+		       	<svg></svg>
+		    </nvd3-multi-bar-chart>
+		  </div>
+		<div class="col-lg-3">
+			<ul class="list-group">
+				<a class="list-group-item active"> User profile </a>
+				<li class="list-group-item">
+					<h2>{{user.name}}</h2>
+					<!-- <h3>{{user.email}}</h3> -->
+					<h4 ng-class="{'text-success': user.points > 0, 'text-danger': user.points < 0}">Current karma: <strong>{{user.points}}</strong></h4>
+				</li>
+			</ul>
+		</div>
+
+		<div class="col-lg-5">
+			<ul class="list-group">
+				<a class="list-group-item active"> Log </a>
+				<li class="list-group-item">
+					<div class="alert log-items" ng-repeat='item in log.log | orderBy:"date":true | limitTo:showPerPage' ng-class="{'alert-success': item.points > 0, 'alert-danger': item.points < 0, 'alert-info': item.points == 0}">
+							<div class="bold"><strong>Points: </strong>{{item.points}}</div>
+							<div><strong>Comment: </strong>{{item.msg}}</div>
+							<div class="text-muted">{{item.date}}</div>
+							<span class="text-muted">by: {{item.updatedBy}}</span>
+					</div>
+				</li>
+				<li class="list-group-item" ng-click="showMoreLogs()"><button class="btn btn-primary form-control">Load 10 more logs</button></li>
+			</ul>
+		</div>
+
+		<div class="col-lg-4 personal-goals">
+			<div class="list-group">
+				<a class="list-group-item active"> Personal goals </a>
+				<a class="list-group-item" ng-repeat='rule in rules.content | orderBy:"points":true' ng-click='ruleCollapse(rule)' ng-class="{'list-group-item-info': rule.active}"><span class="badge" ng-class="{'badge-success': rule.points > 0, 'badge-danger': rule.points < 0}">{{rule.points}}</span>	<span class="glyphicon glyphicon-trash margin-right-5" ng-click="removeRule(rule.msg);$event.stopPropagation()" ng-if="role =='admin'"></span>{{rule.msg}}
+			
+					<div class="btn-holder margin-top" role="group" ng-if="rule.active && role =='admin'">
+            <button class="btn btn-success" ng-click="changeUserKarma(user._id, rule); $event.stopPropagation()">Apply this rule</button>
+            <button class="btn btn-warning pull-right" ng-click="rule.active=false; $event.stopPropagation()">Cancel</button>
+          </div>
+				</a>
+				<a class="list-group-item" ng-hide="rules.content.length > 0">Nothing here</a>
+				<li class="list-group-item" ng-if="role=='admin'">
+					<form ng-submit="addRule()">
+						<div class="input-group">
+							<span class="input-group-addon">Txt:</span>
+							<input class="form-control" type="text" ng-model="newRule.text" placeholder="Enter goal text" ng-required="true">
+						</div>
+						<div class="input-group margin-top">
+								<span class="input-group-addon">Pts:</span>
+								<input class="form-control" type="number" ng-model="newRule.points" placeholder="0" ng-required="true">
+						</div>
+						<input class="btn btn-primary form-control margin-top" type="submit" value="Add personal goal">
+					</form>
+				</li>
+			</div>
+
+			<ul class="list-group global-goals">
+				<a class="list-group-item active"> Global goals </a>
+				<li class="list-group-item" ng-repeat='rule in globalRules.content | orderBy:"points":true'><span class="badge" ng-class="{'badge-success': rule.points > 0, 'badge-danger': rule.points < 0}">{{rule.points}}</span>{{rule.msg}}</li>
+				<li class="list-group-item" ng-hide="globalRules.content">Nothing here</li>
+				<li class="list-group-item text-muted">Go to general list to work with global rules</li>
+			</ul>
+		</div>
+	</div>
+		
+</div>

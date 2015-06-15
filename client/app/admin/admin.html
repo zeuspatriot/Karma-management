@@ -1,0 +1,46 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container">
+  <ul class="list-group">
+	<li class="list-group-item" ng-repeat="user in users | orderBy:'name'">
+		<strong>{{user.name}}</strong><a ng-click="delete(user)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a><br>
+		<div class="text-muted">{{user.email}}</div>
+		<div class="text-muted">Role: {{user.role}}</div>
+		<div class="text-muted">Team: {{user.team ? user.team : 'unassigned'}}
+			<span class="glyphicon glyphicon-pencil margin-left-15" ng-click="edit = !edit"></span>
+			<form ng-submit="changeData(user._id, changes,'team')">
+			<div class="input-group margin-all-nl-15" ng-if="edit">
+	      <div class="input-group-btn">
+	        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Choose team <span class="caret"></span></button>
+	        <ul class="dropdown-menu" role="menu">
+	          <li ng-repeat="team in teams"><a href="#" ng-click="changes.team = team">{{team}}</a></li>
+	        </ul>
+	      </div><!-- /btn-group -->
+	      <input type="text" class="form-control" aria-label="..." ng-model="changes.team" ng-required="true" placeholder="...choose from dropdown to the left, or enter manually...">
+	      <span class="input-group-btn">
+	        <button class="btn btn-success" type="submit"> Apply! </button>
+	      </span>
+	    </div><!-- /input-group -->
+	    </form>
+		</div>
+		<div class="text-muted">Job Code: {{user.jobCode ? user.jobCode : 'unassigned'}}
+			<span class="glyphicon glyphicon-pencil margin-left-15" ng-click="editJobCode = !editJobCode"></span>
+			<form ng-submit="changeData(user._id, changes, 'jobCode')">
+			<div class="input-group margin-all-nl-15" ng-if="editJobCode">
+	      <div class="input-group-btn">
+	        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Choose Job Code <span class="caret"></span></button>
+	        <ul class="dropdown-menu" role="menu">
+	          <li ng-repeat="code in jobCodes"><a href="#" ng-click="changes.jobCode = code">{{code}}</a></li>
+	        </ul>
+	      </div><!-- /btn-group -->
+	      <input type="text" class="form-control" aria-label="..." ng-model="changes.jobCode" ng-required="true" placeholder="...choose from dropdown to the left, or enter manually...">
+	      <span class="input-group-btn">
+	        <button class="btn btn-success" type="submit"> Apply! </button>
+	      </span>
+	    </div><!-- /input-group -->
+	    </form>
+		</div>
+		<button class="btn btn-warning" ng-if="user.role!='admin'" ng-click="promote(user._id)">Promote to admin</button>
+		
+	</li>
+  </ul>
+</div>

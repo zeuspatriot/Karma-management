@@ -1,0 +1,79 @@
+span#bg{
+    background-image: url(/assets/images/background.jpg);
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+.footer {
+    text-align: center;
+    padding: 30px 0;
+    margin-top: 70px;
+    color: white;
+}
+.badge-success{
+    background-color: green;
+}
+.badge-danger{
+    background-color: crimson;
+}
+.panel-body div.row{
+    height: 110px;
+}
+.margin-top{
+    margin-top: 7px;
+}
+.margin-left-5{
+	margin-left: 5px;
+}
+.margin-left-15{
+	margin-left: 15px;
+}
+.margin-right-5{
+    margin-right: 5px;
+}
+.margin-all-nl-15{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+}
+.margin-all-5{
+    margin: 5px;
+}
+.user-profile-tab.user-checked{
+	box-shadow: 0 3px 7px;
+	margin-left: -25px;
+    background-color: khaki;
+}
+.bold{
+	font-weight: bold;
+}
+.pointer{
+    cursor: pointer;
+}
+.user-profile-tab{
+    background-color: white;
+    box-shadow: 0 1px 7px;
+    padding-top: 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+#chart{
+	height: 450px;
+	width: 100%;
+}
+.affix{
+	width: 263px;
+}
+.glyphicon.glyphicon-trash{
+    cursor: pointer;
+}
+.ex-user{
+    color: #B43414;
+    top: 2.5px;
+}
+.sticky{
+    position: fixed;
+    width: 15%;
+    display: table;
+}
