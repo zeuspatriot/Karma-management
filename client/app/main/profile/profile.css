@@ -1,0 +1,12 @@
+.log-success{
+	background-color: green;
+}
+.log-danger{
+	background-color: crimson;
+}
+.margin-all{
+	margin: 3px;
+}
+.alert.log-items{
+	margin-bottom: 10px !important;
+}

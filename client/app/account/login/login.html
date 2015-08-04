@@ -1,0 +1,66 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row md-whiteframe-z1">
+    <div class="col-sm-12 loginbox">
+      <h1>Login</h1>
+      <p>Enter you credentials to the fields below, or click "sign up" if you dont have account yet.</p>
+      <p>If you have some problems with log-in, please contact me on <code>dmitriy.gorbachev@maxymiser.com</code></p>
+    </div>
+    <div class="col-sm-12">
+      <form class="form" name="form" ng-submit="login(form)" class="ng-invalid ng-invalid-required ng-invalid-min ng-valid-max ng-dirty ng-valid-parse ng-valid-md-maxlength">
+        <md-input-container flex="" class="md-default-theme">
+          <label for="email">Email</label>
+          <input name="email" type="email" class="ng-pristine ng-valid md-input ng-touched" id="email" tabindex="0" aria-invalid="false" style="" ng-model="user.email" required>
+          <div ng-messages="form.email.$error" aria-required="true" aria-live="assertive" class="ng-inactive">
+          <!-- ngMessage: required --><div ng-message="required" class="ng-scope">This is required.</div>
+          <div ng-message="email" class="ng-scope">Please provide valid email.</div>
+        </div>
+        </md-input-container>
+
+        <md-input-container flex="" class="md-default-theme">
+          <label for="email">Password</label>
+          <input type="password" class="ng-pristine ng-valid md-input ng-touched" name="password" id="email" tabindex="0" aria-required="true" aria-invalid="false" style="" ng-model="user.password" required>
+          <div ng-messages="errors" aria-live="assertive" class="ng-inactive" style="">
+          <!-- ngMessage: md-maxlength --><div ng-message="other" class="ng-scope">{{errors.other}}</div>
+        </div>
+        <div ng-messages="form.password.$error" aria-live="assertive" class="ng-inactive" style="">
+          <!-- ngMessage: md-maxlength --><div ng-message="required" class="ng-scope">Password is required</div>
+        </div>
+        </md-input-container>
+        <!-- <div class="form-group">
+          <label>Email</label>
+
+          <input type="email" name="email" class="form-control" ng-model="user.email" required>
+        </div> -->
+
+     <!--    <div class="form-group">
+          <label>Password</label>
+
+          <input type="password" name="password" class="form-control" ng-model="user.password" required>
+        </div> -->
+        <!-- <div class="form-group has-error">
+          <p class="help-block" ng-show="form.email.$error.required && form.password.$error.required && submitted">
+             Please enter your email and password.
+          </p>
+          <p class="help-block" ng-show="form.email.$error.email && submitted">
+             Please enter a valid email.
+          </p>
+          <pre>{{errors}}</pre>
+          <p class="help-block">{{ errors.other }}</p>
+        </div> -->
+
+        <div>
+          <button class="md-raised md-button md-default-theme">
+            <span class="ng-scope">Login</span>
+            <div class="md-ripple-container"></div>
+          </button>
+          <a class="md-raised md-button md-default-theme" href="/signup">
+            Register
+          </a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
