@@ -1,7 +1,7 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div class="container">
-  <div class="row md-whiteframe-z1">
+  <div class="row md-whiteframe-z1 whitebox">
     <div class="col-sm-12">
       <h1>Sign up</h1>
     </div>
@@ -80,13 +80,10 @@
         </div> -->
 
         <div>
-          <button class="md-raised md-button md-default-theme">
-            <span class="ng-scope">Register</span>
-            <div class="md-ripple-container"></div>
-          </button>
-          <a class="md-raised md-button md-default-theme btn-register" href="/login">
-            Login
-          </a>
+          <md-button class="md-raised md-primary">Register</md-button>
+          <md-button type="button" class="md-raised">
+            <a href="/login" class="linkButton">Login</a> 
+          </md-button>
         </div>
 
       </form>

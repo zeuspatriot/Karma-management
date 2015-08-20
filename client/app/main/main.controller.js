@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('karmaApp')
-	.controller('MainCtrl', function ($scope, $http, $location, $window, User, Log, Rules, Auth, $timeout, $mdSidenav, $mdUtil, $log) {
+	.controller('MainCtrl', function ($scope, $http, $location, $window, User, Log, Rules, Auth, $timeout, $mdSidenav, $mdUtil, $log, $q, $mdDialog, $mdBottomSheet) {
+		
 		$scope.toggleRight = buildToggler('right');
     /**
      * Build handler to open/close a SideNav; when animation finishes
@@ -20,10 +21,8 @@ angular.module('karmaApp')
     $scope.close = function () {
       $mdSidenav('right').close()
         .then(function () {
-          $log.debug("close RIGHT is done");
         });
     };
-
 
 		$scope.users = User.query(function(users){
 			// chartData.processChartData(users);
@@ -35,12 +34,50 @@ angular.module('karmaApp')
 				if(user.team && $scope.teams.indexOf(user.team) == -1) $scope.teams.push(user.team);
 				if(user.jobCode && $scope.jobCodes.indexOf(user.jobCode) == -1) $scope.jobCodes.push(user.jobCode);
 			});
+
+			$scope.querySearch = querySearch;
+	    $scope.allContacts = loadContacts();
+	    
+	    $scope.contacts = [];
+	    $scope.filterSelected = true;
+	    /**
+	     * Search for contacts.
+	     */
+
+	    function querySearch (query) {
+	      var results = query ?
+	          $scope.allContacts.filter(createFilterFor(query)) : [];
+	      return results;
+	    }
+	    /**
+	     * Create filter function for a query string
+	     */
+	    function createFilterFor(query) {
+	      var lowercaseQuery = angular.lowercase(query);
+	      return function filterFn(contact) {
+	        return (contact._lowername.indexOf(lowercaseQuery) != -1);
+	      };
+	    }
+	    function loadContacts() {
+	      var contacts = $scope.users;
+
+	      return contacts.map(function (c, index) {
+	        var contact = c;
+	        contact._lowername = contact.name.toLowerCase();
+	        return contact;
+	      });
+	    }
+
 		});
 		$scope.filteredUsers = [];
 		$scope.filteredChartData = [];
 		$scope.newRuleFlag = false;
 	
-		$scope.rules = Rules.getByUserId({id: "global"});
+		$scope.rules = Rules.getByUserId({id: "global"}, function(){
+			$scope.getActiveRule = function(){
+				return $scope.rules.content.filter(function(rule){return rule.active})[0];
+			};
+		});
 
 		$scope.role = Auth.getCurrentUser().role;
 		$scope.$watch(function(){
@@ -54,10 +91,6 @@ angular.module('karmaApp')
 			$scope.changeKarma = karma;
 		})
 
-		// $scope.changeKarma = {
-		// 	users : [],
-		// 	ids : []
-		// };
 		$scope.changeKarma = [];
 		// Users are filtered with the help of checkboxes.
 		var filterUsers = function(users, filters){
@@ -144,7 +177,7 @@ angular.module('karmaApp')
 		$scope.changeUserKarma = function(usersToChange, karma){
 			karma.id = [];
 			usersToChange.forEach(function(user){
-				karma.id.push(user.id);
+				karma.id.push(user._id);
 			});
 			User.changeUserKarma(karma, function(res){
 				// console.log(res);
@@ -221,7 +254,46 @@ angular.module('karmaApp')
 			$scope.newRuleFlag = !$scope.newRuleFlag;
 		};
 
-		$scope.getActiveRule = function(){
-			return $scope.rules.content.filter(function(rule){return rule.active})[0];
-		}
-})
+		
+
+
+
+		$scope.status = '  ';
+	  $scope.showAlert = function(ev) {
+	    // Appending dialog to document.body to cover sidenav in docs app
+	    // Modal dialogs should fully cover application
+	    // to prevent interaction outside of dialog
+	    $mdDialog.show(
+	      $mdDialog.alert()
+	        .parent(angular.element(document.querySelector('#popupContainer')))
+	        .clickOutsideToClose(true)
+	        .title('This is an alert title')
+	        .content('You can specify some description text in here.')
+	        .ariaLabel('Alert Dialog Demo')
+	        .ok('Got it!')
+	        .targetEvent(ev)
+	    );
+	  };
+	  $scope.showConfirm = function(ev) {
+	    // Appending dialog to document.body to cover sidenav in docs app
+	    var confirm = $mdDialog.confirm()
+	          .title('Delete this goal?')
+	          .content('You are about to delete this goal, are you sure you want to do it?')
+	          .ok('Yes')
+	          .cancel('No')
+	          .targetEvent(ev)
+	          .clickOutsideToClose(true);
+	    $mdDialog.show(confirm).then(function() {
+	    	$scope.removeRule($scope.getActiveRule().msg);
+	      $scope.close();
+	    }, function() {
+	    	// You clicked cancel
+	    });
+	  };
+		
+	  $scope.seeProfile = function(id){
+	  	$location.url("/profile?user="+id);
+	  };
+});
+
+

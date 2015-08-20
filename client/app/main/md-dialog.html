@@ -1,0 +1,25 @@
+<md-dialog aria-label="Mango (Fruit)">
+  <form>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Delete this rule?</h2>
+      <span flex></span>
+    </div>
+  </md-toolbar>
+  <md-dialog-content style="max-width:800px;max-height:810px; ">
+    <div>
+      <p>
+        You are about to delete this rule, are you sure you want to do it?
+      </p>
+    </div>
+  </md-dialog-content>
+  <div class="md-actions" layout="row">
+    <md-button ng-click="answer('yes')">
+     Yes
+    </md-button>
+    <md-button ng-click="answer('no')" style="margin-right:20px;">
+      No
+    </md-button>
+  </div>
+  </form>
+</md-dialog>

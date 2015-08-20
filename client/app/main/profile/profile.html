@@ -2,7 +2,7 @@
 <div class="container">
 	<div class="row">
 			<!-- <pre>{{showPerPage}}</pre> -->
-			<div class="well row">
+		<!-- <div class="well row">
 			<nvd3-multi-bar-chart
 				ng-if="data[0].values.length>0"
 				data="data"
@@ -20,19 +20,135 @@
 			tooltips="true">
 				<svg></svg>
 			</nvd3-multi-bar-chart>
-		  </div>
+		</div> -->
 		<div class="col-lg-3">
+			<section class="md-whiteframe-z1">
+				<md-toolbar class="md-theme-light">
+					<h2 class="md-toolbar-tools">
+						<span>User profile</span>
+					</h2>
+				</md-toolbar>
+				<md-content>
+					<md-list>
+						<md-list-item class="md-line-1">
+							<h2 flex>{{user.name}}</h2>
+						</md-list-item>
+						<md-list-item>
+							<h4 flex ng-class="{'text-success': user.points > 0, 'text-danger': user.points < 0}">Current karma: <strong>{{user.points}}</strong></h4>
+						</md-list-item>
+					</md-list>
+				</md-content>
+			</section>
+		</div>
+
+			<div class="col-lg-5">
+				<section class="md-whiteframe-z1">
+					<md-toolbar class="md-theme-light" layout="row">
+						<h2 class="md-toolbar-tools">
+							<span>Log</span>
+						</h2>
+					</md-toolbar>
+					<md-content>
+						<md-list>
+							<md-list-item class="md-line-3 padding-15 list-group-item" ng-repeat='item in log.log | orderBy:"date":true | limitTo:showPerPage' ng-class="{'alert-success': item.points > 0, 'alert-danger': item.points < 0, 'alert-info': item.points == 0}" layout="column" layout-align="start start">
+								<div class="bold"><strong>Points: </strong>{{item.points}}</div>
+								<div><strong>Title: </strong>{{item.msg}}</div>
+								<div ng-if="item.note"><strong>Comment: </strong>{{item.note}}</div>
+								<div class="text-muted">{{item.date}}</div>
+								<span class="text-muted">by: {{item.updatedBy}}</span>
+							</md-list-item>
+							<md-list-item layout="column" layout-align="center center">
+								<md-button flex class="md-raised md-primary" ng-click="showMoreLogs()">Load more items</md-button>
+							</md-list-item>
+						</md-list>
+					</md-content>
+				</section>
+			</div>
+
+			<div class="col-lg-4">
+				<section layout-wrap class="md-whiteframe-z1">
+				<md-content>
+				<md-toolbar class="md-theme-light" layout="row" layout-align="center center">
+					<div flex>
+						<h2 class="md-toolbar-tools">
+							<span>Personal goals</span>
+						</h2>
+					</div>
+					<div flex-order="2" class="deleteBtn">
+								<md-button class="md-fab md-mini md-primary deleteIcon" ng-click="newRuleFlag = true">
+				          +
+				        </md-button>
+							</div>
+				</md-toolbar>
+					<md-list>
+						<md-list-item class="" ng-hide="rules.content.length > 0">
+							<h4>Nothing here</h4>
+						</md-list-item>
+						<md-list-item class="md-3-line" ng-repeat='rule in rules.content | orderBy:"points":true' ng-click='ruleCollapse(rule);toggleRight()' layout="row" layout-align="start center">
+							<div layout="column" flex layout-fill>
+								<div layout="row">
+									<h4 flex>{{rule.msg}}</h4>
+									<div flex-odrer="2">
+										<md-button  class="md-fab md-mini" ng-class="{'md-primary': rule.points >= 0, 'md-warn': rule.points < 0}">
+											{{rule.points}}
+										</md-button>
+										<md-button  class="md-fab md-mini" ng-if="rule.active" ng-click="changeUserKarma(user._id, rule);$event.stopPropagation()">
+											Go!
+										</md-button>
+									</div>
+								</div>
+								<div flex ng-if="rule.active">
+						    	<md-input-container flex>
+						        <label class="color-black">You may add comment here...</label>
+						        <input ng-model="rule.note">
+						      </md-input-container>
+						    </div>
+								
+							</div>
+							<md-divider ng-if="!$last"></md-divider>
+						</md-list-item>
+						<md-toolbar ng-if="newRuleFlag">
+							<h2 class="md-toolbar-tools">
+								<span>Create new goal</span>
+							</h2>
+						</md-toolbar>
+							<md-list-item class="md-3-line" ng-if="newRuleFlag" flex layout="column">
+								<div  layout="row" layout-align="center">
+									<md-input-container flex="70">
+							    	<label class="color-black">Goal text</label>
+							    	<input required name="text" ng-model="newRule.text">
+							    </md-input-container>
+							    <md-input-container flex="20">
+							    	<label class="color-black">points</label>
+							    	<input type="number" step="1" name="points" required ng-model="newRule.points">
+							    </md-input-container>
+								</div>
+						    <div flex class="">
+			      			<md-button class="md-raised md-primary" ng-disabled="!(newRule.text && newRule.points)" ng-click="addRule()">Create</md-button>
+							    <md-button class="md-raised" ng-click="newRuleTogle()">Cancel</md-button>
+								</div>
+							</md-list-item>
+					</md-list>
+				</md-content>
+					
+
+			</section>
+			</div>
+
+
+
+<!-- 		<div class="col-lg-3">
 			<ul class="list-group">
 				<a class="list-group-item active"> User profile </a>
 				<li class="list-group-item">
 					<h2>{{user.name}}</h2>
-					<!-- <h3>{{user.email}}</h3> -->
+					<h3>{{user.email}}</h3>
 					<h4 ng-class="{'text-success': user.points > 0, 'text-danger': user.points < 0}">Current karma: <strong>{{user.points}}</strong></h4>
 				</li>
 			</ul>
-		</div>
+		</div> -->
 
-		<div class="col-lg-5">
+		<!-- <div class="col-lg-5">
 			<ul class="list-group">
 				<a class="list-group-item active"> Log </a>
 				<li class="list-group-item">
@@ -47,8 +163,8 @@
 				<li class="list-group-item" ng-click="showMoreLogs()"><button class="btn btn-primary form-control">Load 10 more logs</button></li>
 			</ul>
 		</div>
-
-		<div class="col-lg-4 personal-goals">
+ -->
+		<!-- <div class="col-lg-4 personal-goals">
 			<div class="list-group">
 				<a class="list-group-item active"> Personal goals </a>
 				<a class="list-group-item" ng-repeat='rule in rules.content | orderBy:"points":true' ng-click='ruleCollapse(rule)' ng-class="{'list-group-item-info': rule.active}"><span class="badge" ng-class="{'badge-success': rule.points > 0, 'badge-danger': rule.points < 0}">{{rule.points}}</span>	<span class="glyphicon glyphicon-trash margin-right-5" ng-click="removeRule(rule.msg);$event.stopPropagation()" ng-if="role =='admin'"></span>{{rule.msg}}
@@ -69,8 +185,8 @@
 						<div class="input-group margin-top">
 								<span class="input-group-addon">Pts:</span>
 								<input class="form-control" type="number" ng-model="newRule.points" placeholder="0" ng-required="true">
-						</div>
-						<!-- <input class="btn btn-primary form-control margin-top" type="submit" value="Add personal goal"> -->
+						</div> -->
+						<!-- <input class="btn btn-primary form-control margin-top" type="submit" value="Add personal goal">
 						 <button class="btn btn-success form-control margin-top" type="submit">Create</button>
 					</form>
 					<button class="btn btn-warning form-control margin-top" ng-click="newRuleTogle()" type = "button">Cancel</button>
@@ -78,15 +194,15 @@
 				<a class="list-group-item" ng-if="role=='admin'">
 				  <button class="btn btn-primary form-control margin-top" type="button" ng-click="newRuleFlag = true" ng-hide="newRuleFlag">Add new personal goal</button>
 				</a>
-			</div>
+			</div> -->
 
-			<ul class="list-group global-goals">
+			<!-- <ul class="list-group global-goals">
 				<a class="list-group-item active"> Global goals </a>
 				<li class="list-group-item" ng-repeat='rule in globalRules.content | orderBy:"points":true'><span class="badge" ng-class="{'badge-success': rule.points > 0, 'badge-danger': rule.points < 0}">{{rule.points}}</span>{{rule.msg}}</li>
 				<li class="list-group-item" ng-hide="globalRules.content">Nothing here</li>
 				<li class="list-group-item text-muted">Go to general list to work with global rules</li>
-			</ul>
+			</ul> 
 		</div>
-	</div>
+	</div>-->
 		
 </div>
